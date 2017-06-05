@@ -3,6 +3,26 @@
   stat: path={{ couchpotato_install_dir }}
   register: check_installed
 
-- name: CentOS Install
-  include: "centos.yml"
-  when: ansible_distribution == 'CentOS' and check_installed.stat.exists == False
+- name: Install
+  include: 'install.yml'
+  when:
+    - ansible_distribution == 'CentOS'
+    - not check_installed.stat.exists
+
+- name: Configure Backups
+  include: 'backups.yml'
+  when:
+    - ansible_distribution == 'CentOS'
+    - not check_installed.stat.exists
+    - couchpotato_cron_backup_enabled
+
+- name: Update
+  git:
+    repo: "{{ couchpotato_git_repo }}"
+    dest: "{{ couchpotato_install_dir }}"
+    version: master
+    update: yes
+  when:
+    - ansible_distribution == 'CentOS'
+    - check_installed.stat.exists
+    - couchpotato_allow_update

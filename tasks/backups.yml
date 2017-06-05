@@ -1,0 +1,42 @@
+---
+
+- name: Stat backup target
+  stat: path={{ couchpotato_backup_target }}
+  register: backup_dir
+
+- name: Create backup dir
+  file:
+    path: "{{ couchpotato_backup_target }}"
+    state: directory
+    owner: root
+    group: root
+  when: backup_dir.stat.exists == False
+
+- name: Stat backup script dir
+  stat: path={{ couchpotato_backup_script_dir }}
+  register: backup_script_dir
+
+- name: Create backup script dir
+  file:
+    path: "{{ couchpotato_backup_script_dir }}"
+    state: directory
+    owner: root
+    group: root
+  when: backup_script_dir.stat.exists == False
+
+- name: Create backup script
+  template:
+    src: couchpotato_backup.sh.j2
+    dest: "{{ couchpotato_backup_script_dir }}/couchpotato_backup.sh"
+    owner: root
+    group: root
+    mode: "a+x"
+
+- name: Create cron backup
+  cron:
+    name: "Couch Potato Server Backup"
+    hour: "04"
+    minute: "00"
+    user: "root"
+    job: "{{ couchpotato_backup_script_dir }}/couchpotato_backup.sh"
+    state: present

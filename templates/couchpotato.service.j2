@@ -7,8 +7,8 @@ Description=Couch Potato Daemon
 
 [Service]
 Type=forking
-User={{ stack_user }}
-Group={{ stack_user_group }}
+User={{ couchpotato_user }}
+Group={{ couchpotato_group }}
 ExecStart=/usr/bin/python {{ couchpotato_install_dir }}/CouchPotato.py --daemon --data_dir={{ couchpotato_config_dir }} --config_file={{ couchpotato_config_file }} --quiet
 GuessMainPID=no
 
