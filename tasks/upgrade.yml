@@ -1,0 +1,10 @@
+---
+
+- name: Update
+  git:
+    repo: "{{ couchpotato_git_repo }}"
+    dest: "{{ couchpotato_install_dir }}"
+    version: master
+    update: yes
+  notify:
+    - restart couchpotato

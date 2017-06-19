@@ -17,11 +17,7 @@
     - couchpotato_cron_backup_enabled
 
 - name: Update
-  git:
-    repo: "{{ couchpotato_git_repo }}"
-    dest: "{{ couchpotato_install_dir }}"
-    version: master
-    update: yes
+  include: "upgrade.yml"
   when:
     - ansible_distribution == 'CentOS'
     - check_installed.stat.exists
