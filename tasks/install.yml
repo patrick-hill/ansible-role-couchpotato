@@ -85,6 +85,14 @@
   become: yes
   when: firewall_enabled
 
+- name: Post Processing Script Template
+  template:
+    src: couchpotato_post_processor.sh.j2
+    dest: "{{ couchpotato_scritp_dir }}"
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
+    mode: 0644
+
 - name: Add service
   template:
     src: couchpotato.service.j2

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+
+cp_dir={{ couchpotato_install_dir }}
+cp_hostname=localhost
+
+couch_api_key=`grep -m 1 api_key ${cp_dir}/settings.conf | cut -d ' ' -f 3`;
+couch_port=`grep -m 1 port $cp_dir/settings.conf | cut -d ' ' -f 3`;
+
+wget -q --delete-after http://${cp_hostname}:${couch_port}/api/${couch_api_key}/renamer.scan
+
+exit 0
