@@ -8,8 +8,8 @@
   file:
     path: "{{ couchpotato_backup_target }}"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
   when: backup_dir.stat.exists == False
 
 - name: Stat backup script dir
@@ -20,16 +20,16 @@
   file:
     path: "{{ couchpotato_backup_script_dir }}"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
   when: backup_script_dir.stat.exists == False
 
 - name: Create backup script
   template:
     src: couchpotato_backup.sh.j2
     dest: "{{ couchpotato_backup_script_dir }}/couchpotato_backup.sh"
-    owner: root
-    group: root
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
     mode: "a+x"
 
 - name: Create cron backup
