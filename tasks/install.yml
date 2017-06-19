@@ -27,6 +27,7 @@
   with_items:
     - "{{ couchpotato_install_dir }}"
     - "{{ couchpotato_config_dir }}"
+    - "{{ couchpotato_script_dir }}"
   become: true
 
 - name: Clone repo from GitHub
@@ -35,31 +36,31 @@
     dest: "{{ couchpotato_install_dir }}"
     version: master
 
-- name: Copy Restore File (From Locall if possible)
-  copy:
-    src: "{{ playbook_dir }}/files/couchpotato_backup.tar.gz"
-    dest: /tmp/couchpotato_backup.tar.gz
-    remote_src: no
-  when: couchpotato_restore_file is defined
-  ignore_errors: yes
+- block:
 
-- name: Stat Restore File
-  stat: path="\tmp\couchpotato_backup.tar.gz"
-  register: restore_file
+    - name: Get files from couchpotato_backup_target
+      find:
+        paths: "{{ couchpotato_backup_target }}"
+      register: found_files
 
-- name: Copy Restore File
-  copy:
-    src: "{{ playbook_dir }}/files/couchpotato_backup.tar.gz"
-    dest: /tmp
+    - name: Get latest backup file
+      set_fact:
+        __couchpotato_restore_file: "{{ found_files.files | sort(attribute='mtime',reverse=true) | first  }}"
+
+    - name: Set Fact for couchpotato_restore_file
+      set_fact:
+        couchpotato_restore_file: "{{ __couchpotato_restore_file.path }}"
+
   when:
-    - couchpotato_restore_file is defined
-    - not restore_file.stat.exists
+    - couchpotato_restore_from_backups
 
 - name: Extract Restore Backup
   unarchive:
-    src: "/tmp/couchpotato_backup.tar.gz"
+    src: "{{ couchpotato_restore_file }}"
     dest: "{{ couchpotato_config_dir }}"
     copy: no
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
   become: yes
   when:
     - couchpotato_restore_file is defined
@@ -67,8 +68,6 @@
 - name: Set dir owner
   file:
     path: "{{ item }}"
-    owner: "{{ couchpotato_user }}"
-    group: "{{ couchpotato_group }}"
     recurse: yes
     state: directory
     mode: 0755
