@@ -1,0 +1,12 @@
+---
+
+- name: start couchpotato
+  service:
+    name: couchpotato
+    state: started
+    enabled: yes
+
+- name: restart couchpotato
+  service:
+    name: couchpotato
+    state: restarted
