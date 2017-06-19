@@ -4,6 +4,10 @@ couchpotato_install_root_dir: /opt
 couchpotato_install_dir:  "{{ couchpotato_install_root_dir }}/couchpotato"
 couchpotato_config_dir:   "/var/couchpotato"
 couchpotato_config_file:  "{{ couchpotato_config_dir }}/couchpotatoserver_config.ini"
+couchpotato_script_dir:   "{{ couchpotato_install_root_dir }}/scripts"
+
+couchpotato_restore_from_backups: false
+couchpotato_restore_file: ''
 
 couchpotato_git_repo: https://github.com/RuudBurger/CouchPotatoServer.git
 couchpotato_cron_backup_enabled: true
@@ -17,4 +21,4 @@ couchpotato_backup_script_dir: "{{ couchpotato_install_root_dir }}/_backups/scri
 couchpotato_backup_command: tar -cpzf
 couchpotato_backup_filename: couchpotato-`date \+%Y\%m\%d-%T`.tar.gz
 couchpotato_backup_sources: "*"
-couchpotato_backup_target: "{{ couchpotato_install_root_dir }}/_backups"
+couchpotato_backup_target: "{{ couchpotato_install_root_dir }}/_backups/couchpotato"
