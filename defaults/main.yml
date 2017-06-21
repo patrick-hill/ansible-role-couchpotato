@@ -17,7 +17,7 @@ couchpotato_user: 'couchpotato'
 couchpotato_group: 'couchpotato'
 
 # Backup Script Variables
-couchpotato_backup_script_dir: "{{ couchpotato_install_root_dir }}/_backups/scritps"
+couchpotato_backup_script_dir: "{{ couchpotato_install_root_dir }}/_backups/scripts"
 couchpotato_backup_command: tar -cpzf
 couchpotato_backup_filename: couchpotato-`date \+%Y\%m\%d-%T`.tar.gz
 couchpotato_backup_sources: "*"

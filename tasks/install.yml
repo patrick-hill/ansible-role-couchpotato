@@ -51,8 +51,7 @@
       set_fact:
         couchpotato_restore_file: "{{ __couchpotato_restore_file.path }}"
 
-  when:
-    - couchpotato_restore_from_backups
+  when: couchpotato_restore_from_backups
 
 - name: Extract Restore Backup
   unarchive:
@@ -87,7 +86,7 @@
 - name: Post Processing Script Template
   template:
     src: couchpotato_post_processor.sh.j2
-    dest: "{{ couchpotato_scritp_dir }}"
+    dest: "{{ couchpotato_script_dir }}"
     owner: "{{ couchpotato_user }}"
     group: "{{ couchpotato_group }}"
     mode: 0644
