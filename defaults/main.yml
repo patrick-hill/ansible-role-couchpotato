@@ -18,7 +18,9 @@ couchpotato_group: 'couchpotato'
 
 # Backup Script Variables
 couchpotato_backup_script_dir: "{{ couchpotato_install_root_dir }}/_backups/scripts"
-couchpotato_backup_command: tar -cpzf
-couchpotato_backup_filename: couchpotato-`date \+%Y\%m\%d-%T`.tar.gz
+couchpotato_backup_command: 'GZIP=-9 tar'
+couchpotato_backup_excludes: "--exclude=db_backup --exclude=logs"
+couchpotato_backup_command_args: '-cpzf'
+couchpotato_backup_filename: couchpotato-`date \+%Y-\%m-\%d__\%H-\%M-\%S`.tar.gz
 couchpotato_backup_sources: "*"
-couchpotato_backup_target: "{{ couchpotato_install_root_dir }}/_backups/couchpotato"
+couchpotato_backup_target: "/_backups/couchpotato"

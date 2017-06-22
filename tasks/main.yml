@@ -5,19 +5,32 @@
 
 - name: Install
   include: 'install.yml'
-  when:
-    - ansible_distribution == 'CentOS'
-    - not check_installed.stat.exists
+  when: not check_installed.stat.exists
 
 - name: Configure Backups
   include: 'backups.yml'
-  when:
-    - ansible_distribution == 'CentOS'
-    - couchpotato_cron_backup_enabled
+  when: couchpotato_cron_backup_enabled
 
-- name: Update
-  include: "upgrade.yml"
+- block:
+
+    - name: Update
+      git:
+        repo: "{{ couchpotato_git_repo }}"
+        dest: "{{ couchpotato_install_dir }}"
+        version: master
+        update: yes
+      ignore_errors: true
+      
+    - name: Take Ownership of Git Repo
+      file:
+        path: "{{ couchpotato_install_dir }}"
+        owner: "{{ couchpotato_user }}"
+        group: "{{ couchpotato_group }}"
+        recurse: true
+      become: true
+      notify:
+        - restart couchpotato
+
   when:
-    - ansible_distribution == 'CentOS'
     - check_installed.stat.exists
     - couchpotato_allow_update

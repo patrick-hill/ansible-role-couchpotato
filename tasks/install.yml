@@ -36,6 +36,14 @@
     dest: "{{ couchpotato_install_dir }}"
     version: master
 
+- name: Take Ownership of Git Repo
+  file:
+    path: "{{ couchpotato_install_dir }}"
+    owner: "{{ couchpotato_user }}"
+    group: "{{ couchpotato_group }}"
+    recurse: true
+  become: true
+
 - block:
 
     - name: Get files from couchpotato_backup_target

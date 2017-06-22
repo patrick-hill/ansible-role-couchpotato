@@ -3,10 +3,18 @@
 # Script is used to backup sensitive files to a compressed file
 
 archive_command="{{ couchpotato_backup_command }}"
+archive_command_args={{ couchpotato_backup_command_args }}
+archive_excludes="{{ couchpotato_backup_excludes }}"
 backup_filename={{ couchpotato_backup_filename }}
 backup_dir={{ couchpotato_config_dir }}
 backup_source={{ couchpotato_backup_sources }}
 backup_target={{ couchpotato_backup_target }}
 
 cd $backup_dir
-$archive_command $backup_target/$backup_filename $backup_source
+cmd="$archive_command $archive_excludes $archive_command_args $backup_target/$backup_filename $backup_source"
+echo "Command is: $cmd"
+eval $cmd
+
+
+echo 'Done'
+exit 0
