@@ -17,7 +17,7 @@ couchpotato_user: 'couchpotato'
 couchpotato_group: 'couchpotato'
 
 # Backup Script Variables
-couchpotato_backup_script_dir: "{{ couchpotato_install_root_dir }}/_backups/scripts"
+couchpotato_backup_script_dir: "/opt/scripts"
 couchpotato_backup_command: 'GZIP=-9 tar'
 couchpotato_backup_excludes: "--exclude=db_backup --exclude=logs"
 couchpotato_backup_command_args: '-cpzf'
